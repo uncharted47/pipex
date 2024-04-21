@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/21 16:40:45 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/21 22:14:47 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,14 +192,16 @@ int	ft_findfiles(t_pipex *cmdline, char **str)
 	if (fd == -1)
 		return (0);
 	cmdline->rd_wr = 1;
-	cmdline->fd = fd;
+	close(fd);
+	cmdline->file = str[i];
 	cmdline = ft_lstlast(cmdline);
 	i = get_outfile(str);
 	fd = open(str[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (fd == -1)
 		return (0);
+	close(fd);
 	cmdline->rd_wr = 2;
-	cmdline->fd = fd;
+	cmdline->file = str[i];
 	return (1);
 }
 
