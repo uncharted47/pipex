@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 00:23:10 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 00:28:33 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	execute(t_pipex *cmdline, char **env)
 	head = cmdline;
 	while (cmdline)
 	{
-		dprintf(2, "cmd %s \n", cmdline->cmd);
+		// dprintf(2, "cmd %s \n", cmdline->cmd);
 		ft_childprocess(cmdline, env, head, &last);
 
 		cmdline = cmdline->next;
