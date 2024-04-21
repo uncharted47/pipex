@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:15:16 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/20 02:48:12 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/21 01:57:40 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	ft_lstclear(t_pipex **lst)
 	if (!lst || !(*lst))
 		return ;
 	tmp = (*lst);
+	free(tmp->pipe);
 	while (*lst)
 	{
 		tmp = (*lst)->next;
@@ -68,7 +69,7 @@ int	ft_lstsize(t_pipex *lst)
 	return (i);
 }
 
-t_pipex	*ft_lstnew(char *cmd, char **args, char *path, char *file)
+t_pipex	*ft_lstnew(char *cmd, char **args, char *path, t_pipe *pipe)
 {
 	t_pipex	*node;
 
@@ -77,11 +78,9 @@ t_pipex	*ft_lstnew(char *cmd, char **args, char *path, char *file)
 		return (NULL);
 	node->cmd = cmd;
 	node->args = args;
-	node->file = file;
 	node->path = path;
+	node->pipe = pipe;
 	node->fd = -1;
-	node->pipe[0] = -1;
-	node->pipe[1] = -1;
 	node->rd_wr = 0;
 	node->next = NULL;
 	return (node);

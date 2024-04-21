@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/20 01:47:10 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/21 16:40:45 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ char	**joinstr(char **str)
 	line = NULL;
 	while (str[i])
 		line = ft_strjoin(line, str[i++]);
-	split = ft_split(line, wsp);
+	split = ft_split(line, WSP);
 	return (free(line), split);
 }
+
 char	*get_cmdpath(char *path, char *cmd)
 {
 	char	**split;
@@ -32,16 +33,14 @@ char	*get_cmdpath(char *path, char *cmd)
 	char	*new;
 	char	**cmdsplit;
 	size_t	i;
-	size_t	j;
 
-	j = 0;
 	new = NULL;
 	if (!cmd)
 		return (NULL);
 	if (access(cmd, F_OK | X_OK) != -1)
 		return (cmd);
 	i = 0;
-	cmdsplit = ft_split(cmd, wsp);
+	cmdsplit = ft_split(cmd, WSP);
 	new = ft_strjoin(ft_strdup("/"), cmdsplit[0]);
 	split = ft_split((path + 5), ":");
 	if (!split)
@@ -58,7 +57,7 @@ char	*get_cmdpath(char *path, char *cmd)
 		free(line);
 		i++;
 	}
-	return (failsafe(split), free(cmd), failsafe(cmdsplit), free(new), NULL);
+	return (failsafe(split), failsafe(cmdsplit), free(new), cmd);
 }
 
 char	*get_envpath(char **env)
@@ -66,6 +65,8 @@ char	*get_envpath(char **env)
 	size_t	i;
 
 	i = 0;
+	if (!env || !*env)
+		return (NULL);
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH=", 5) == 0)
@@ -97,6 +98,20 @@ int	isacmd(char *cmd)
 	return (0);
 }
 
+char	*ft_removepath(char *cmd)
+{
+	size_t	i;
+	char	*str;
+	char	*result;
+
+	i = ft_strlen(cmd) - 1;
+	str = ft_strdup(cmd);
+	while (i && str[i] != '/')
+		i--;
+	result = ft_strdup(&str[i + 1]);
+	return (free(str), result);
+}
+
 char	**ft_getargs(char *str, char *cmd)
 {
 	size_t	i;
@@ -105,7 +120,7 @@ char	**ft_getargs(char *str, char *cmd)
 	char	**arr;
 
 	i = 0;
-	tmp = ft_strtrim(str, wsp);
+	tmp = ft_strtrim(str, WSP);
 	if (!tmp)
 		return (NULL);
 	while (ft_isalnum(tmp[i]))
@@ -113,10 +128,10 @@ char	**ft_getargs(char *str, char *cmd)
 	arr = (char **)malloc(sizeof(char *) * 3);
 	if (!arr)
 		return (perror("ERROR:"), NULL);
-	arr[0] = ft_strdup(cmd);
+	arr[0] = ft_removepath(cmd);
 	if (i == ft_strlen(tmp))
 		return (arr[1] = NULL, free(tmp), arr);
-	tmp2 = ft_strtrim(&tmp[i], wsp);
+	tmp2 = ft_strtrim(&tmp[i], WSP);
 	arr[1] = ft_strdup(tmp2);
 	if (!arr[1])
 		return (free(arr[0]), free(tmp), free(tmp2), free(arr),
@@ -125,16 +140,29 @@ char	**ft_getargs(char *str, char *cmd)
 	return (free(tmp), free(tmp2), arr);
 }
 
+void	ft_initpipe(t_pipe **pipe)
+{
+	t_pipe	*new;
+
+	new = malloc(sizeof(t_pipe));
+	new->in = -1;
+	new->out = -1;
+	new->pipe[0] = -1;
+	new->pipe[1] = -1;
+	new->tmp = -1;
+	*pipe = new;
+}
+
 t_pipex	*create_linecmd(char **cmd, char **env)
 {
 	size_t	i;
 	size_t	size;
-	size_t	j;
 	t_pipex	*cmdline;
 	t_pipex	*cmdhead;
 	char	*cmdpath;
+	t_pipe	*pipe;
 
-	j = 0;
+	ft_initpipe(&pipe);
 	cmdline = NULL;
 	cmdpath = NULL;
 	cmdhead = NULL;
@@ -142,15 +170,12 @@ t_pipex	*create_linecmd(char **cmd, char **env)
 	size = get_outfile(cmd);
 	while (cmd[i] && i < size)
 	{
-		cmdpath = get_cmdpath(get_envpath(env), ft_strtrim(cmd[i], wsp));
-		if (access(cmdpath, F_OK | X_OK) == 0)
-		{
-			cmdline = ft_lstnew(ft_strdup(cmd[i]), ft_getargs(cmd[i], cmdpath),
-					cmdpath, NULL);
-			if (!cmdline)
-				return (ft_lstclear(&cmdhead), NULL);
-			ft_lstadd_back(&cmdhead, cmdline);
-		}
+		cmdpath = get_cmdpath(get_envpath(env), ft_strtrim(cmd[i], WSP));
+		cmdline = ft_lstnew(ft_strdup(cmd[i]), ft_getargs(cmd[i], cmdpath),
+				cmdpath, pipe);
+		if (!cmdline)
+			return (ft_lstclear(&cmdhead), NULL);
+		ft_lstadd_back(&cmdhead, cmdline);
 		i++;
 	}
 	return (cmdhead);
@@ -163,18 +188,16 @@ int	ft_findfiles(t_pipex *cmdline, char **str)
 
 	fd = -1;
 	i = 0;
-	fd = open(str[i], O_RDWR);
+	fd = open(str[i], O_RDONLY);
 	if (fd == -1)
 		return (0);
 	cmdline->rd_wr = 1;
-	cmdline->file = str[i];
 	cmdline->fd = fd;
 	cmdline = ft_lstlast(cmdline);
 	i = get_outfile(str);
-	fd = open(str[i], O_RDWR, O_CREAT, O_TRUNC);
+	fd = open(str[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (fd == -1)
 		return (0);
-	cmdline->file = str[i];
 	cmdline->rd_wr = 2;
 	cmdline->fd = fd;
 	return (1);
