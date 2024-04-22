@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:15:16 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/21 01:57:40 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:49:04 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void	ft_lstclear(t_pipex **lst)
 	if (!lst || !(*lst))
 		return ;
 	tmp = (*lst);
-	free(tmp->pipe);
+	if (tmp->pipe)
+		free(tmp->pipe);
 	while (*lst)
 	{
 		tmp = (*lst)->next;

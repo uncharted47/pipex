@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 16:46:55 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:59:45 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*cmdpath_helper(char **split, char **cmdsplit, char *cmd, char *new)
 		line = ft_strjoin2(split[i], new);
 		if (!line)
 			return (failsafe(split), free(cmd), failsafe(cmdsplit),
-				perror("Error:"), free(new), NULL);
+				perror("Pipex Error: allocation failed:"), free(new), NULL);
 		if (!access(line, F_OK | X_OK))
 			return (failsafe(split), free(cmd), failsafe(cmdsplit), free(new),
 				line);
@@ -37,7 +37,6 @@ char	**ft_getargs(char *str, char *cmd)
 {
 	size_t	i;
 	char	*tmp;
-	char	*tmp2;
 	char	**arr;
 
 	i = 0;
@@ -50,15 +49,16 @@ char	**ft_getargs(char *str, char *cmd)
 	if (!arr)
 		return (perror("ERROR:"), NULL);
 	arr[0] = ft_removepath(cmd);
+	if (!arr[0])
+		return (free(tmp), free(arr), NULL);
 	if (i == ft_strlen(tmp))
 		return (arr[1] = NULL, free(tmp), arr);
-	tmp2 = ft_strtrim(&tmp[i], WSP);
-	arr[1] = ft_strdup(tmp2);
+	arr[1] = ft_strdup(ft_strtrim(&tmp[i], WSP));
 	if (!arr[1])
-		return (free(arr[0]), free(tmp), free(tmp2), free(arr),
-			perror("Error :"), NULL);
+		return (free(arr[0]), free(tmp), free(arr),
+			perror("Pipex Error: allocation failed \n"), NULL);
 	arr[2] = NULL;
-	return (free(tmp), free(tmp2), arr);
+	return (free(tmp), arr);
 }
 
 t_pipe	*ft_initpipe(void)
@@ -110,7 +110,10 @@ t_pipex	*parse(char **str, char **env, int cmd)
 
 	pipe = NULL;
 	pipe = create_linecmd((str + 1), env);
+	if (!pipe || !pipe->pipe)
+		(ft_lstclear(&pipe), ft_exit("Pipex Error: allocation failed"));
 	if (!ft_findfiles(pipe, str))
-		return (ft_lstclear(&pipe), ft_exit("Error: missing files \n"), NULL);
+		return (ft_lstclear(&pipe), ft_exit("Pipex Error: missing files \n"),
+			NULL);
 	return (pipe);
 }
