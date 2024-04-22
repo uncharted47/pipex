@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 00:28:33 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 02:02:19 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ int	ft_duphelper(t_pipex *cmdline)
 {
 	dup2(cmdline->pipe->in, 0);
 	dup2(cmdline->pipe->out, 1);
-	dprintf(2, " child in : %d||| out : %d \n", cmdline->pipe->in,
-		cmdline->pipe->out);
+	close(cmdline->pipe->in);
+	close(cmdline->pipe->out);
+	close(cmdline->pipe->pipe[1]);
+	close(cmdline->pipe->pipe[0]);
+	close(cmdline->pipe->tmp);
 	return (0);
 }
 
@@ -63,6 +66,7 @@ int	ft_dupfiles(t_pipex *cmdline, t_pipex *head)
 			cmdline->pipe->in);
 		close(cmdline->pipe->pipe[1]);
 		close(cmdline->pipe->in);
+		cmdline->pipe->in = -1;
 		cmdline->pipe->out = open(cmdline->file, O_CREAT | O_RDWR | O_TRUNC,
 				0666);
 		cmdline->pipe->in = cmdline->pipe->tmp;
@@ -75,6 +79,7 @@ int	ft_dupfiles(t_pipex *cmdline, t_pipex *head)
 	cmdline->pipe->in = -1;
 	close(cmdline->pipe->out);
 	cmdline->pipe->out = -1;
+	close(cmdline->pipe->pipe[1]);
 	pipe(cmdline->pipe->pipe);
 	cmdline->pipe->in = cmdline->pipe->tmp;
 	cmdline->pipe->out = cmdline->pipe->pipe[1];
@@ -92,17 +97,17 @@ int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head, pid_t *last)
 	id = fork();
 	if (id == -1)
 		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
-	if (cmdline->rd_wr == 2)
+	if (cmdline->rd_wr == 1)
 		*last = id;
 	if (id == 0)
 	{
-		if (ft_duphelper(cmdline))
-			return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
+	if (ft_duphelper(cmdline))
+		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
 		if (execve(cmdline->path, cmdline->args, env))
 			return (ft_lstclear(&head), perror("Error child:"), exit(1), 0);
 	}
 	// close(cmdline->pipe->tmp);
-	return (1);
+	return (id);
 }
 
 void	execute(t_pipex *cmdline, char **env)
@@ -123,9 +128,9 @@ void	execute(t_pipex *cmdline, char **env)
 	}
 	close(ft_lstlast(head)->pipe->in);
 	close(ft_lstlast(head)->pipe->out);
-	waitpid(last, &status, 0);
-	// while (1)
-	// 	;
+	// wait(0);
+	;
+ while (waitpid(-1, NULL, 0) > 0) {}
 	ft_lstclear(&head);
 	return ;
 }
