@@ -6,21 +6,21 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 01:24:42 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:46:41 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
+
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
+# include <sys/types.h>
 # include <sys/wait.h>
-#include <sys/types.h>
-
-
+# include <unistd.h>
 # define WSP " \r\t\v\n\f"
+
 typedef struct s_pipe
 {
 	int				pipe[2];
@@ -64,6 +64,7 @@ char				*ft_strrchr(char *str, int sub);
 char				*ft_strtrim(char const *s1, char const *set);
 void				ft_lstadd_back(t_pipex **lst, t_pipex *new);
 t_pipex				*ft_lstlast(t_pipex *lst);
+char				*ft_strcat(char *dest, const char *src);
 void				ft_lstadd_back(t_pipex **lst, t_pipex *new);
 void				ft_lstdelone(t_pipex *lst);
 char				**failsafe(char **split);
@@ -72,8 +73,14 @@ char				*ft_substr(char *s, unsigned int start, size_t len);
 void				ft_lstclear(t_pipex **lst);
 //==========================parsing==================
 t_pipex				*parse(char **str, char **env, int cmd);
-// void				skipsepword(const char *str, char *sep, int *i, int flag);
+char				*get_cmdpath(char *path, char *cmd);
+char				*get_envpath(char **env);
+size_t				get_outfile(char **cmd);
+char				*ft_removepath(char *cmd);
+int					ft_findfiles(t_pipex *cmdline, char **str);
 int					is_sep(char c, char *sep);
+char				*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
+						char *new);
 //=======================ERROR======================
 void				ft_exit(char *message);
 //===============excution=======================
