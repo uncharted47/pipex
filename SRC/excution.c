@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 02:02:19 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 02:16:14 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head, pid_t *last)
 		*last = id;
 	if (id == 0)
 	{
-	if (ft_duphelper(cmdline))
-		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
+		if (ft_duphelper(cmdline))
+			return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
 		if (execve(cmdline->path, cmdline->args, env))
 			return (ft_lstclear(&head), perror("Error child:"), exit(1), 0);
 	}
@@ -130,7 +130,8 @@ void	execute(t_pipex *cmdline, char **env)
 	close(ft_lstlast(head)->pipe->out);
 	// wait(0);
 	;
- while (waitpid(-1, NULL, 0) > 0) {}
+	while (waitpid(-1, NULL, 0) > 0)
+		;
 	ft_lstclear(&head);
 	return ;
 }
