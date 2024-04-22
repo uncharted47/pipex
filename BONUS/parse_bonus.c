@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 17:17:00 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:59:45 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ t_pipex	*create_linecmd(char **cmd, char **env)
 	return (cmdhead);
 }
 
-t_pipex	*parse(char **str, char **env)
+t_pipex	*parse(char **str, char **env, int cmd)
 {
 	t_pipex	*pipe;
 

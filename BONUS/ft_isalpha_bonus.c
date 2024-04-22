@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 17:17:57 by elyzouli         ###   ########.fr       */
+/*   Created: 2023/10/30 20:30:24 by elyzouli          #+#    #+#             */
+/*   Updated: 2024/04/18 23:02:21 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int cmd, char *str[], char *env[])
+int	ft_isalpha(int car)
 {
-	t_pipex	*head;
-
-	head = parse(&str[1], env);
-	if (ft_lstsize(head) != 2 && cmd != 5)
-	{
-		ft_lstclear(&head);
-		ft_exit("Pipex : too many cmmands \n");
-		return (0);
-	}
-	execute(head, env);
+	if ((car >= 'a' && car <= 'z') || (car >= 'A' && car <= 'Z'))
+		return (1);
 	return (0);
 }

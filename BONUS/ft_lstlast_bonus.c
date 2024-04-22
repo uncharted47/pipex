@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 17:17:57 by elyzouli         ###   ########.fr       */
+/*   Created: 2023/11/02 15:16:59 by elyzouli          #+#    #+#             */
+/*   Updated: 2024/04/11 07:06:24 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int cmd, char *str[], char *env[])
+t_pipex	*ft_lstlast(t_pipex *lst)
 {
-	t_pipex	*head;
+	if (!lst)
+		return (NULL);
+	while (lst && lst->next)
+		lst = lst->next;
+	return (lst);
+}
 
-	head = parse(&str[1], env);
-	if (ft_lstsize(head) != 2 && cmd != 5)
-	{
-		ft_lstclear(&head);
-		ft_exit("Pipex : too many cmmands \n");
-		return (0);
-	}
-	execute(head, env);
-	return (0);
+size_t	ft_strlen(const char *s)
+{
+	size_t	size;
+
+	size = 0;
+	while (s[size])
+		size++;
+	return (size);
 }

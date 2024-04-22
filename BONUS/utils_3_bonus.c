@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   utils_3_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 17:17:57 by elyzouli         ###   ########.fr       */
+/*   Created: 2024/04/22 17:03:13 by elyzouli          #+#    #+#             */
+/*   Updated: 2024/04/22 17:48:19 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	main(int cmd, char *str[], char *env[])
+void	ft_cmdnotfound(char *cmd)
 {
-	t_pipex	*head;
+	char	*msg;
 
-	head = parse(&str[1], env);
-	if (ft_lstsize(head) != 2 && cmd != 5)
+	msg = NULL;
+	msg = ft_strjoin2("Pipex : command not found ", cmd);
+	if (!msg)
 	{
-		ft_lstclear(&head);
-		ft_exit("Pipex : too many cmmands \n");
-		return (0);
+		write(2, "Pipex : command not found \n",
+			ft_strlen("Pipex : command not found \n"));
+		return ;
 	}
-	execute(head, env);
-	return (0);
+	msg = ft_strjoin(msg, " \n");
+	write(2, msg, ft_strlen(msg));
+	free(msg);
+	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 16:46:41 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 17:17:08 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int					ft_lstsize(t_pipex *lst);
 char				*ft_substr(char *s, unsigned int start, size_t len);
 void				ft_lstclear(t_pipex **lst);
 //==========================parsing==================
-t_pipex				*parse(char **str, char **env, int cmd);
+t_pipex				*parse(char **str, char **env);
 char				*get_cmdpath(char *path, char *cmd);
 char				*get_envpath(char **env);
 size_t				get_outfile(char **cmd);
@@ -85,4 +85,5 @@ char				*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
 void				ft_exit(char *message);
 //===============excution=======================
 void				execute(t_pipex *cmdline, char **env);
+void				ft_cmdnotfound(char *cmd);
 #endif
