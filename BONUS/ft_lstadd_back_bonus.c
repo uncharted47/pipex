@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 15:15:16 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 16:49:04 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 22:19:49 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	ft_lstadd_back(t_pipex **lst, t_pipex *new)
 {
@@ -84,5 +84,6 @@ t_pipex	*ft_lstnew(char *cmd, char **args, char *path, t_pipe *pipe)
 	node->fd = -1;
 	node->rd_wr = 0;
 	node->next = NULL;
+	node->delimiter = NULL;
 	return (node);
 }

@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 16:58:49 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 22:50:43 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	main(int cmd, char *str[], char *env[])
 {
-	pid_t	id;
-	int		i;
 	t_pipex	*head;
+	(void)cmd;
 
-	i = 0;
-	head = parse(&str[1], env, cmd);
-	if (ft_lstsize(&head) != 2)
-	{
-		ft_lstclear(&head);
-		ft_exit("Pipex : too many cmmands \n");
-		return (0);
-	}
+	if (!ft_strncmp("here_doc", str[1], ft_strlen("here_doc")))
+		head = parse_heredoc(&str[2], env);
+	else
+		head = parse(&str[1], env);
+	dprintf(2, "size = %d\n", ft_lstsize(head));
 	execute(head, env);
+	while(1);
 	return (0);
 }

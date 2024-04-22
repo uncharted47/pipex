@@ -1,8 +1,0 @@
-total 1340
-drwxr-xr-x 2 elyzouli 2019    4096 Apr 21 21:03 INC
-drwxr-xr-x 2 elyzouli 2019    4096 Apr 21 21:03 libft
--rw-r--r-- 1 elyzouli 2019    1482 Apr 21 21:03 Makefile
--rw-r--r-- 1 elyzouli 2019    2983 Apr 21 23:56 out
--rw-r--r-- 1 elyzouli 2019       0 Apr 21 23:57 outfile.txt
--rwxr-xr-x 1 elyzouli 2019 1345384 Apr 21 23:55 pipex
-drwxr-xr-x 2 elyzouli 2019    4096 Apr 21 23:55 SRC

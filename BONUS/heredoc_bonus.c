@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   excution.c                                         :+:      :+:    :+:   */
+/*   heredoc_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 21:23:55 by elyzouli         ###   ########.fr       */
+/*   Created: 2024/04/22 17:59:58 by elyzouli          #+#    #+#             */
+/*   Updated: 2024/04/22 21:26:17 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-int	ft_duphelper(t_pipex *cmdline)
+int	ft_duphelper_heredoc(t_pipex *cmdline)
 {
-	if (dup2(cmdline->pipe->in, 0) == -1)
+	if (dup2(cmdline->pipe->in, 0))
 		return (1);
-	if (dup2(cmdline->pipe->out, 1) == -1)
+	if (dup2(cmdline->pipe->out, 1))
 		return (1);
 	close(cmdline->pipe->in);
 	close(cmdline->pipe->out);
@@ -26,26 +26,19 @@ int	ft_duphelper(t_pipex *cmdline)
 	return (0);
 }
 
-int	ft_dupfiles_helper(t_pipex *cmdline)
-{
-	cmdline->pipe->in = open(cmdline->file, O_RDONLY);
-	if (cmdline->pipe->in == -1)
-	{
-		if (pipe(cmdline->pipe->pipe) == -1)
-			return (1);
-		cmdline->pipe->in = cmdline->pipe->pipe[0];
-		close(cmdline->pipe->pipe[1]);
-	}
-	if (pipe(cmdline->pipe->pipe) == -1)
-		return (1);
-	return (cmdline->pipe->out = cmdline->pipe->pipe[1],
-		cmdline->pipe->tmp = cmdline->pipe->pipe[0], 0);
-}
-
-int	ft_dupfiles(t_pipex *cmdline)
+int	ft_dupfiles_heredoc(t_pipex *cmdline)
 {
 	if (cmdline->rd_wr == 1)
-		return (ft_dupfiles_helper(cmdline));
+	{
+		if (pipe(cmdline->pipe->pipe))
+			return (1);
+		cmdline->pipe->in = cmdline->pipe->fd;
+		close(cmdline->pipe->out);
+		if (pipe(cmdline->pipe->pipe))
+			return (1);
+		return (cmdline->pipe->out = cmdline->pipe->pipe[1],
+			cmdline->pipe->tmp = cmdline->pipe->pipe[0], 0);
+	}
 	else if (cmdline->rd_wr == 2)
 	{
 		(close(cmdline->pipe->pipe[1]), close(cmdline->pipe->in),
@@ -57,26 +50,26 @@ int	ft_dupfiles(t_pipex *cmdline)
 	(close(cmdline->pipe->in), cmdline->pipe->in = -1);
 	(close(cmdline->pipe->out), cmdline->pipe->out = -1);
 	close(cmdline->pipe->pipe[1]);
-	if (pipe(cmdline->pipe->pipe) == -1)
+	if (pipe(cmdline->pipe->pipe))
 		return (1);
 	return (cmdline->pipe->in = cmdline->pipe->tmp,
 		cmdline->pipe->out = cmdline->pipe->pipe[1],
 		cmdline->pipe->tmp = cmdline->pipe->pipe[0], 0);
 }
 
-int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
+int	ft_childprocess_heredoc(t_pipex *cmdline, char **env, t_pipex *head)
 {
 	pid_t	id;
 
-	if (ft_dupfiles(cmdline))
+	if (ft_dupfiles_heredoc(cmdline))
 		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
 	id = fork();
 	if (id == -1)
 		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
 	if (id == 0)
 	{
-		if (ft_duphelper(cmdline))
-			return (ft_lstclear(&head), perror("Pipex Error"), exit(1), 0);
+		if (ft_duphelper_heredoc(cmdline))
+			return (ft_lstclear(&head), perror("Pipex Error:"), exit(1), 0);
 		if (execve(cmdline->path, cmdline->args, env))
 			return (ft_cmdnotfound(cmdline->args[0]), ft_lstclear(&head),
 				exit(1), 0);
@@ -84,19 +77,21 @@ int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 	return (id);
 }
 
-void	execute(t_pipex *cmdline, char **env)
+void	execute_heredoc(t_pipex *cmdline, char **env)
 {
 	t_pipex	*head;
 
 	head = cmdline;
 	while (cmdline)
 	{
-		ft_childprocess(cmdline, env, head);
+		ft_childprocess_heredoc(cmdline, env, head);
 		cmdline = cmdline->next;
 	}
 	close(ft_lstlast(head)->pipe->in);
 	close(ft_lstlast(head)->pipe->out);
 	while (waitpid(-1, NULL, 0) > 0)
+		;
+	while (1)
 		;
 	ft_lstclear(&head);
 	return ;

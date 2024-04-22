@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 16:59:45 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 22:22:43 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 char	*cmdpath_helper(char **split, char **cmdsplit, char *cmd, char *new)
 {
@@ -37,6 +37,7 @@ char	**ft_getargs(char *str, char *cmd)
 {
 	size_t	i;
 	char	*tmp;
+	char	*tmp2;
 	char	**arr;
 
 	i = 0;
@@ -53,12 +54,12 @@ char	**ft_getargs(char *str, char *cmd)
 		return (free(tmp), free(arr), NULL);
 	if (i == ft_strlen(tmp))
 		return (arr[1] = NULL, free(tmp), arr);
-	arr[1] = ft_strdup(ft_strtrim(&tmp[i], WSP));
+	tmp2 = ft_strtrim(&tmp[i], WSP);
+	arr[1] = ft_strdup(tmp2);
 	if (!arr[1])
-		return (free(arr[0]), free(tmp), free(arr),
+		return (free(arr[0]), free(tmp), free(arr), free(tmp2),
 			perror("Pipex Error: allocation failed \n"), NULL);
-	arr[2] = NULL;
-	return (free(tmp), arr);
+	return (arr[2] = NULL, free(tmp2), free(tmp), arr);
 }
 
 t_pipe	*ft_initpipe(void)
@@ -75,6 +76,7 @@ t_pipe	*ft_initpipe(void)
 	new->pipe[0] = -1;
 	new->pipe[1] = -1;
 	new->tmp = -1;
+	new->fd = -1;
 	return (new);
 }
 
@@ -104,7 +106,7 @@ t_pipex	*create_linecmd(char **cmd, char **env)
 	return (cmdhead);
 }
 
-t_pipex	*parse(char **str, char **env, int cmd)
+t_pipex	*parse(char **str, char **env)
 {
 	t_pipex	*pipe;
 
