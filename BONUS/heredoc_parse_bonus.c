@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:04:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 22:48:34 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 23:10:36 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	ft_findfiles_heredoc(t_pipex *cmdline, char **str)
 	return (1);
 }
 
-t_pipex	*parse_heredoc(char **str, char **env)
+t_pipex	*parse_heredoc(char **str, char **env, int cmd)
 {
 	t_pipex *pipe;
 
@@ -76,6 +76,14 @@ t_pipex	*parse_heredoc(char **str, char **env)
 		ft_exit("Pipex : atleast 2 commands for 1 pipe \n");
 		return (0);
 	}
+	if (ft_lstsize(pipe) < 2 || cmd < 6)
+	{
+		ft_lstclear(&pipe);
+		ft_exit("Pipex : atleast 2 commands for 1 pipe \n");
+		return (0);
+	}
+	else if (cmd >= 5)
+		return (ft_lstclear(&pipe), ft_exit("Pipex : not enough arguments"), 0);
 	ft_readheredoc(pipe);
 	return (pipe);
 }

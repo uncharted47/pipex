@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 21:28:30 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 23:09:22 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char				*ft_substr(char *s, unsigned int start, size_t len);
 void				ft_lstclear(t_pipex **lst);
 //==========================parsing==================
 t_pipex				*create_linecmd(char **cmd, char **env);
-t_pipex				*parse(char **str, char **env);
+t_pipex				*parse(char **str, char **env, int cmd);
 char				*get_cmdpath(char *path, char *cmd);
 char				*get_envpath(char **env);
 size_t				get_outfile(char **cmd);
@@ -84,7 +84,7 @@ int					ft_findfiles(t_pipex *cmdline, char **str);
 int					is_sep(char c, char *sep);
 char				*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
 						char *new);
-t_pipex				*parse_heredoc(char **str, char **env);
+t_pipex				*parse_heredoc(char **str, char **env,int cmd);
 //=======================ERROR======================
 void				ft_exit(char *message);
 //===============excution=======================

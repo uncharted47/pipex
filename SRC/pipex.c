@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 17:17:57 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 23:09:47 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int cmd, char *str[], char *env[])
 	if (ft_lstsize(head) != 2 && cmd != 5)
 	{
 		ft_lstclear(&head);
-		ft_exit("Pipex : too many cmmands \n");
+		ft_exit("Pipex : too many or too few cmmands \n");
 		return (0);
 	}
 	execute(head, env);

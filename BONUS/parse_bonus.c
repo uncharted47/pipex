@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 22:22:43 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/22 23:11:32 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_pipex	*create_linecmd(char **cmd, char **env)
 	return (cmdhead);
 }
 
-t_pipex	*parse(char **str, char **env)
+t_pipex	*parse(char **str, char **env, int cmd)
 {
 	t_pipex	*pipe;
 
@@ -117,5 +117,13 @@ t_pipex	*parse(char **str, char **env)
 	if (!ft_findfiles(pipe, str))
 		return (ft_lstclear(&pipe), ft_exit("Pipex Error: missing files \n"),
 			NULL);
+	if (ft_lstsize(pipe) < 2 || cmd < 6)
+	{
+		ft_lstclear(&pipe);
+		ft_exit("Pipex : atleast 2 commands for 1 pipe \n");
+		return (0);
+	}
+	else if (cmd < 6)
+		return (ft_lstclear(&pipe), ft_exit("Pipex : not enough arguments"), 0);
 	return (pipe);
 }
