@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:24:59 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:06:26 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,15 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# define WSP " "
+# define WSP " \t\n\f\r\v"
+
+typedef struct s_args
+{
+	size_t			i;
+	char			*tmp;
+	char			*tmp2;
+	char			**arr;
+}					t_args;
 
 typedef struct s_pipe
 {
@@ -84,7 +92,7 @@ int					ft_findfiles(t_pipex *cmdline, char **str);
 int					is_sep(char c, char *sep);
 char				*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
 						char *new);
-t_pipex				*parse_heredoc(char **str, char **env,int cmd);
+t_pipex				*parse_heredoc(char **str, char **env, int cmd);
 //=======================ERROR======================
 void				ft_exit(char *message);
 //===============excution=======================

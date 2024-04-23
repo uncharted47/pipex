@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:59:58 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 21:26:17 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:23:25 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,21 @@ int	ft_duphelper_heredoc(t_pipex *cmdline)
 	return (0);
 }
 
+int	ft_herlper(t_pipex *cmdline)
+{
+	if (pipe(cmdline->pipe->pipe))
+		return (1);
+	cmdline->pipe->in = cmdline->pipe->fd;
+	close(cmdline->pipe->out);
+	return (0);
+}
+
 int	ft_dupfiles_heredoc(t_pipex *cmdline)
 {
 	if (cmdline->rd_wr == 1)
 	{
-		if (pipe(cmdline->pipe->pipe))
+		if (ft_herlper(cmdline))
 			return (1);
-		cmdline->pipe->in = cmdline->pipe->fd;
-		close(cmdline->pipe->out);
 		if (pipe(cmdline->pipe->pipe))
 			return (1);
 		return (cmdline->pipe->out = cmdline->pipe->pipe[1],

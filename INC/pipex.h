@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:25:05 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:06:36 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,15 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# define WSP " "
+# define WSP " \t\n\f\r\v"
+
+typedef struct s_args
+{
+	size_t			i;
+	char			*tmp;
+	char			*tmp2;
+	char			**arr;
+}					t_args;
 
 typedef struct s_pipe
 {

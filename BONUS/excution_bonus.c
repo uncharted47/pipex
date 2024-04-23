@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:13:22 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:21:21 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,6 @@ void	execute(t_pipex *cmdline, char **env)
 	while (waitpid(-1, NULL, 0) > 0)
 		;
 	ft_lstclear(&head);
+	unlink("/tmp/here_doc");
 	return ;
 }

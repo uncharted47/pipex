@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:07:10 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 19:07:55 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,32 +35,31 @@ char	*cmdpath_helper(char **split, char **cmdsplit, char *cmd, char *new)
 
 char	**ft_getargs(char *str, char *cmd)
 {
-	size_t	i;
-	char	*tmp;
-	char	*tmp2;
-	char	**arr;
+	t_args	args;
 
-	(i = 0, tmp = ft_strtrim(str, WSP));
-	if (!tmp)
+	args.i = 0;
+	args.tmp = ft_strtrim(str, WSP);
+	if (!args.tmp)
 		return (NULL);
-	while (ft_isalnum(tmp[i]))
-		i++;
-	arr = (char **)malloc(sizeof(char *) * 3);
-	if (!arr)
+	while (args.tmp[args.i] && !is_sep(args.tmp[args.i], WSP))
+		args.i++;
+	args.arr = (char **)malloc(sizeof(char *) * 3);
+	if (!args.arr)
 		return (perror("ERROR:"), NULL);
-	arr[0] = ft_removepath(cmd);
-	if (!arr[0])
-		return (free(tmp), free(arr), NULL);
-	if (i == ft_strlen(tmp))
-		return (arr[1] = NULL, free(tmp), arr);
-	tmp2 = ft_strtrim(&tmp[i], WSP);
-	if (!tmp2)
-		return (free(tmp), free(arr[0]), free(arr), free(tmp), NULL);
-	arr[1] = ft_strdup(tmp2);
-	if (!arr[1])
-		return (free(arr[0]), free(tmp), free(arr),
+	args.arr[0] = ft_removepath(cmd);
+	if (!args.arr[0])
+		return (free(args.tmp), free(args.arr), NULL);
+	if (args.i == ft_strlen(args.tmp))
+		return (args.arr[1] = NULL, free(args.tmp), args.arr);
+	args.tmp2 = ft_strtrim(&(args.tmp[args.i]), WSP);
+	if (!args.tmp2)
+		return (free(args.tmp), free(args.arr[0]), free(args.arr),
+			free(args.tmp), NULL);
+	args.arr[1] = ft_strdup(args.tmp2);
+	if (!args.arr[1])
+		return (free(args.arr[0]), free(args.tmp), free(args.arr),
 			perror("Pipex Error: allocation failed \n"), NULL);
-	return (arr[2] = NULL, free(tmp), free(tmp2), arr);
+	return (args.arr[2] = NULL, free(args.tmp), free(args.tmp2), args.arr);
 }
 
 t_pipe	*ft_initpipe(void)
