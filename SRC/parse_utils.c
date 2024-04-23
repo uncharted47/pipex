@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:11 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 21:24:23 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:15:43 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char	*ft_removepath(char *cmd)
 	char	*result;
 
 	i = ft_strlen(cmd) - 1;
+	if (ft_strlen(cmd) == 1)
+		return (ft_strdup(cmd));
 	str = ft_strdup(cmd);
 	while (i && str[i] != '/')
 		i--;

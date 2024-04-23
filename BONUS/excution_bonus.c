@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 22:17:19 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:13:22 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ int	ft_dupfiles(t_pipex *cmdline)
 	{
 		(close(cmdline->pipe->pipe[1]), close(cmdline->pipe->in),
 			cmdline->pipe->in = -1);
-
 		cmdline->pipe->out = open(cmdline->file, O_CREAT | O_RDWR | O_APPEND,
 				0666);
 		return (cmdline->pipe->in = cmdline->pipe->tmp, 0);

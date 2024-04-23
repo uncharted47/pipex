@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/22 20:55:21 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:07:10 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ char	**ft_getargs(char *str, char *cmd)
 {
 	size_t	i;
 	char	*tmp;
+	char	*tmp2;
 	char	**arr;
 
-	i = 0;
-	tmp = ft_strtrim(str, WSP);
+	(i = 0, tmp = ft_strtrim(str, WSP));
 	if (!tmp)
 		return (NULL);
 	while (ft_isalnum(tmp[i]))
@@ -53,12 +53,14 @@ char	**ft_getargs(char *str, char *cmd)
 		return (free(tmp), free(arr), NULL);
 	if (i == ft_strlen(tmp))
 		return (arr[1] = NULL, free(tmp), arr);
-	arr[1] = ft_strdup(ft_strtrim(&tmp[i], WSP));
+	tmp2 = ft_strtrim(&tmp[i], WSP);
+	if (!tmp2)
+		return (free(tmp), free(arr[0]), free(arr), free(tmp), NULL);
+	arr[1] = ft_strdup(tmp2);
 	if (!arr[1])
 		return (free(arr[0]), free(tmp), free(arr),
 			perror("Pipex Error: allocation failed \n"), NULL);
-	arr[2] = NULL;
-	return (free(tmp), arr);
+	return (arr[2] = NULL, free(tmp), free(tmp2), arr);
 }
 
 t_pipe	*ft_initpipe(void)
