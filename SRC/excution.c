@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 01:50:09 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 18:46:20 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ int	ft_duphelper(t_pipex *cmdline)
 
 int	ft_dupfiles_helper(t_pipex *cmdline)
 {
+	int	status;
+
+	status = 0;
 	cmdline->pipe->in = open(cmdline->file, O_RDONLY);
 	if (cmdline->pipe->in == -1)
-		return (cmdline->pipe->file = cmdline->file, 1);
+		(cmdline->pipe->file = cmdline->file, status = 1);
 	if (pipe(cmdline->pipe->pipe) == -1)
 		return (1);
 	return (cmdline->pipe->out = cmdline->pipe->pipe[1],
-		cmdline->pipe->tmp = cmdline->pipe->pipe[0], 0);
+		cmdline->pipe->tmp = cmdline->pipe->pipe[0], status);
 }
 
 int	ft_dupfiles(t_pipex *cmdline)
@@ -67,7 +70,7 @@ int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 	int		fd;
 
 	if (ft_dupfiles(cmdline))
-		return (perror(cmdline->pipe->file), ft_lstclear(&head), exit(1), 0);
+		return (perror(cmdline->pipe->file), 1);
 	id = fork();
 	if (id == -1)
 		return (ft_lstclear(&head), perror("Pipex Error"), exit(11), 0);
