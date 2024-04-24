@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 19:09:19 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:05:39 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,7 @@ t_pipex	*parse(char **str, char **env, int cmd)
 	if (!pipe || !pipe->pipe)
 		(ft_lstclear(&pipe), ft_exit("Pipex Error: allocation failed"));
 	if (!ft_findfiles(pipe, str))
-		return (ft_lstclear(&pipe), ft_exit("Pipex Error: missing files \n"),
-			NULL);
+		return (ft_lstclear(&pipe), NULL);
 	if (ft_lstsize(pipe) < 2 || cmd < 5)
 	{
 		ft_lstclear(&pipe);
