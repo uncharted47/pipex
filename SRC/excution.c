@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 22:01:06 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:30:31 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 	int		fd;
 	int		status;
 
-	fd = 0;
+	fd = -1;
 	id = 0;
 	status = 0;
 	if (ft_dupfiles(cmdline))

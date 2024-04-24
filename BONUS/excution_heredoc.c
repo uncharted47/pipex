@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 03:55:49 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 00:40:12 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,36 @@
 
 static int	ft_duphelper(t_pipex *cmdline)
 {
+	int	status;
+
+	status = 0;
 	if (dup2(cmdline->pipe->in, 0) == -1)
-		return (1);
+		(status = 1);
 	if (dup2(cmdline->pipe->out, 1) == -1)
-		return (1);
+		(status = 1);
 	close(cmdline->pipe->in);
 	close(cmdline->pipe->out);
 	close(cmdline->pipe->pipe[1]);
 	close(cmdline->pipe->pipe[0]);
 	close(cmdline->pipe->tmp);
-	return (0);
+	return (status);
 }
 
 static int	ft_dupfiles_helper(t_pipex *cmdline)
 {
+	int	status;
+
+	status = 0;
 	cmdline->pipe->in = open(cmdline->file, O_RDONLY);
+	if (cmdline->pipe->in == -1)
+	{
+		cmdline->pipe->file = cmdline->file;
+		status = 1;
+	}
 	if (pipe(cmdline->pipe->pipe) == -1)
-		return (1);
+		(status = 1);
 	return (cmdline->pipe->out = cmdline->pipe->pipe[1],
-		cmdline->pipe->tmp = cmdline->pipe->pipe[0], 0);
+		cmdline->pipe->tmp = cmdline->pipe->pipe[0], status);
 }
 
 static int	ft_dupfiles(t_pipex *cmdline)
@@ -45,6 +56,9 @@ static int	ft_dupfiles(t_pipex *cmdline)
 			cmdline->pipe->in = -1);
 		cmdline->pipe->out = open(cmdline->file, O_CREAT | O_RDWR | O_APPEND,
 				0666);
+		if (cmdline->pipe->out == -1)
+			return (close(cmdline->pipe->tmp),
+				cmdline->pipe->file = cmdline->file, 1);
 		return (cmdline->pipe->in = cmdline->pipe->tmp, 0);
 	}
 	(close(cmdline->pipe->in), cmdline->pipe->in = -1);
@@ -60,19 +74,23 @@ static int	ft_dupfiles(t_pipex *cmdline)
 static int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 {
 	pid_t	id;
+	int		fd;
+	int		status;
 
+	fd = 0;
+	id = 0;
+	status = 0;
 	if (ft_dupfiles(cmdline))
-		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
-	id = fork();
-	if (id == -1)
-		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
-	if (id == 0)
+		(perror(cmdline->pipe->file), status = 1);
+	cmdline->id = fork();
+	if (cmdline->id == -1)
+		return (ft_lstclear(&head), exit(1), 0);
+	if (cmdline->id == 0)
 	{
-		if (ft_duphelper(cmdline))
-			return (ft_lstclear(&head), perror("Pipex Error here"), exit(1), 0);
+		if (ft_duphelper(cmdline) && status)
+			return (ft_lstclear(&head), exit(1), 1);
 		if (execve(cmdline->path, cmdline->args, env))
-			return (ft_cmdnotfound(cmdline->args[0]), ft_lstclear(&head),
-				exit(1), 0);
+			ft_exitstatus(cmdline, head, fd);
 	}
 	return (id);
 }

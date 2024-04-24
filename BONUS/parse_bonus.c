@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 22:05:39 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 00:16:09 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char	*cmdpath_helper(char **split, char **cmdsplit, char *cmd, char *new)
 char	**ft_getargs(char *str, char *cmd)
 {
 	t_args	args;
+	char	**split;
 
 	args.i = 0;
 	args.tmp = ft_strtrim(str, WSP);
@@ -46,19 +47,18 @@ char	**ft_getargs(char *str, char *cmd)
 	args.arr = (char **)malloc(sizeof(char *) * 3);
 	if (!args.arr)
 		return (perror("ERROR:"), NULL);
-	args.arr[0] = ft_removepath(cmd);
+	(split = ft_split(cmd, WSP), args.arr[0] = ft_removepath(split[0]));
 	if (!args.arr[0])
-		return (free(args.tmp), free(args.arr), NULL);
+		return (free(args.tmp), free(args.arr), failsafe(split), NULL);
 	if (args.i == ft_strlen(args.tmp))
-		return (args.arr[1] = NULL, free(args.tmp), args.arr);
-	args.tmp2 = ft_strtrim(&(args.tmp[args.i]), WSP);
+		return (args.arr[1] = NULL, free(args.tmp), failsafe(split), args.arr);
+	(args.tmp2 = ft_strtrim(&(args.tmp[args.i]), WSP), failsafe(split));
 	if (!args.tmp2)
 		return (free(args.tmp), free(args.arr[0]), free(args.arr),
 			free(args.tmp), NULL);
 	args.arr[1] = ft_strdup(args.tmp2);
 	if (!args.arr[1])
-		return (free(args.arr[0]), free(args.tmp), free(args.arr),
-			perror("Pipex Error: allocation failed \n"), NULL);
+		return (free(args.arr[0]), free(args.tmp), free(args.arr), NULL);
 	return (args.arr[2] = NULL, free(args.tmp), free(args.tmp2), args.arr);
 }
 
