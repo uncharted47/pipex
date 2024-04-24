@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:11 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 17:16:04 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/23 23:05:34 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,22 +73,12 @@ char	*ft_removepath(char *cmd)
 int	ft_findfiles(t_pipex *cmdline, char **str)
 {
 	size_t	i;
-	ssize_t	fd;
 
-	fd = -1;
 	i = 0;
-	fd = open(str[i], O_RDONLY);
-	if (fd == -1)
-		return (0);
 	cmdline->rd_wr = 1;
-	cmdline->pipe->fd = fd;
 	cmdline->file = str[i];
 	cmdline = ft_lstlast(cmdline);
 	i = get_outfile(str);
-	fd = open(str[i], O_CREAT | O_RDWR | O_TRUNC, 0666);
-	if (fd == -1)
-		return (0);
-	close(fd);
 	cmdline->rd_wr = 2;
 	cmdline->file = str[i];
 	return (1);

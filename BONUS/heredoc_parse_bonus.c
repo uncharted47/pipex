@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:04:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 19:31:22 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 03:45:03 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,46 @@ char	*get_outfilehere_doc(char **cmd)
 	return (cmd[i - 1]);
 }
 
+void	ft_writeheredoc(char *holder, t_pipex *cmdline)
+{
+	int	fd;
+
+	unlink("/tmp/heredoc");
+	fd = open("/tmp/heredoc", O_CREAT | O_TRUNC | O_RDWR, 0664);
+	if (fd == -1)
+		return (free(holder));
+	write(fd, holder, ft_strlen(holder));
+	close(fd);
+	return (cmdline->file = "/tmp/heredoc",free(holder));
+}
+
 void	ft_readheredoc(t_pipex *cmdline)
 {
 	char	*line;
-	int		fd[2];
+	char	*holder;
+	char	*heredoc;
 
-	if (pipe(fd))
-		return ;
-	cmdline->pipe->fd = fd[0];
-	dprintf(2, "%d \n", cmdline->pipe->fd);
+	holder = NULL;
+	heredoc = pipecount(cmdline);
+	line = NULL;
 	while (1)
 	{
+		write(1, heredoc, ft_strlen(heredoc));
 		line = get_next_line(0);
+		if (!line)
+			return(free(holder)) ;
 		if (!ft_strncmp(line, cmdline->delimiter, ft_strlen(cmdline->delimiter))
 			&& (ft_strlen(line) - 1) == ft_strlen(cmdline->delimiter))
 		{
-			close(fd[1]);
 			free(line);
-			return ;
+			break ;
 		}
-		write(fd[1], line, ft_strlen(line));
+		holder = ft_strjoin(holder, line);
+		if (!holder)
+			return (free(line));
 		free(line);
 	}
-	return ;
+	return (ft_writeheredoc(holder, cmdline),free(heredoc));
 }
 
 int	ft_findfiles_heredoc(t_pipex *cmdline, char **str)
@@ -53,10 +70,11 @@ int	ft_findfiles_heredoc(t_pipex *cmdline, char **str)
 
 	i = 0;
 	cmdline->rd_wr = 1;
-	cmdline->delimiter = str[i];
+	cmdline->delimiter = str[0];
 	cmdline = ft_lstlast(cmdline);
+	i = get_outfile(str);
 	cmdline->rd_wr = 2;
-	cmdline->file = get_outfilehere_doc(str);
+	cmdline->file = str[i];
 	return (1);
 }
 

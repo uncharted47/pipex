@@ -6,11 +6,11 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 19:21:21 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 03:36:54 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 int	ft_duphelper(t_pipex *cmdline)
 {
@@ -28,7 +28,9 @@ int	ft_duphelper(t_pipex *cmdline)
 
 int	ft_dupfiles_helper(t_pipex *cmdline)
 {
-	cmdline->pipe->in = cmdline->pipe->fd;
+	cmdline->pipe->in = open(cmdline->file, O_RDONLY);
+	if (cmdline->pipe->in == -1)
+		return (cmdline->pipe->file = cmdline->file, 1);
 	if (pipe(cmdline->pipe->pipe) == -1)
 		return (1);
 	return (cmdline->pipe->out = cmdline->pipe->pipe[1],
@@ -43,8 +45,10 @@ int	ft_dupfiles(t_pipex *cmdline)
 	{
 		(close(cmdline->pipe->pipe[1]), close(cmdline->pipe->in),
 			cmdline->pipe->in = -1);
-		cmdline->pipe->out = open(cmdline->file, O_CREAT | O_RDWR | O_APPEND,
+		cmdline->pipe->out = open(cmdline->file, O_CREAT | O_RDWR | O_TRUNC,
 				0666);
+		if (cmdline->pipe->out == -1)
+			return (1);
 		return (cmdline->pipe->in = cmdline->pipe->tmp, 0);
 	}
 	(close(cmdline->pipe->in), cmdline->pipe->in = -1);
@@ -60,27 +64,37 @@ int	ft_dupfiles(t_pipex *cmdline)
 int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 {
 	pid_t	id;
+	int		fd;
 
 	if (ft_dupfiles(cmdline))
-		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
+		return (perror(cmdline->pipe->file), ft_lstclear(&head), exit(1), 0);
 	id = fork();
 	if (id == -1)
-		return (ft_lstclear(&head), perror("Error:"), exit(1), 0);
+		return (ft_lstclear(&head), perror("Pipex Error"), exit(11), 0);
+	cmdline->id = id;
 	if (id == 0)
 	{
 		if (ft_duphelper(cmdline))
-			return (ft_lstclear(&head), perror("Pipex Error here"), exit(1), 0);
+			return (ft_lstclear(&head), perror("Pipex Error"), exit(1), 1);
 		if (execve(cmdline->path, cmdline->args, env))
+		{
+			fd = open(cmdline->args[0], __O_DIRECTORY) != -1;
+			if (fd != -1)
+				return (close(fd), ft_cmdnotfound(cmdline->args[0]),
+					ft_lstclear(&head), exit(126), 1);
 			return (ft_cmdnotfound(cmdline->args[0]), ft_lstclear(&head),
-				exit(1), 0);
+				exit(127), 1);
+		}
 	}
 	return (id);
 }
 
-void	execute(t_pipex *cmdline, char **env)
+int	execute(t_pipex *cmdline, char **env)
 {
 	t_pipex	*head;
+	int		status;
 
+	status = 1;
 	head = cmdline;
 	while (cmdline)
 	{
@@ -89,9 +103,12 @@ void	execute(t_pipex *cmdline, char **env)
 	}
 	close(ft_lstlast(head)->pipe->in);
 	close(ft_lstlast(head)->pipe->out);
-	while (waitpid(-1, NULL, 0) > 0)
-		;
+	cmdline = head;
+	while (cmdline)
+	{
+		waitpid(cmdline->id, &status, 0);
+		cmdline = cmdline->next;
+	}
 	ft_lstclear(&head);
-	unlink("/tmp/here_doc");
-	return ;
+	return (WEXITSTATUS(status));
 }

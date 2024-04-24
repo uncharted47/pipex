@@ -6,7 +6,7 @@
 #    By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 05:25:19 by elyzouli          #+#    #+#              #
-#    Updated: 2024/04/23 17:10:18 by elyzouli         ###   ########.fr        #
+#    Updated: 2024/04/24 03:49:17 by elyzouli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,11 @@
 NAME=pipex
 NAME_BONUS = pipex_bonus
 INCLUDES_DIR = INC
-SRC_FILES = $(wildcard SRC/*.c)
+SRC_FILES = $(wildcard SRC/*.c) $(wildcard libft/*.c)
 OBJ = $(SRC_FILES:.c=.o)
-SRCBNS_FILES = $(wildcard BONUS/*.c) $(wildcard GNL/*.c)
+SRCBNS_FILES = $(wildcard BONUS/*.c) $(wildcard GNL/*.c) $(wildcard libft/*.c)
 OBJBNS = $(SRCBNS_FILES:.c=.o)
-CFLAGS = -g -Wall -Werror -Wextra #-fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra -fsanitize=address
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 19:06:36 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:08:47 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_pipe
 	int				out;
 	int				tmp;
 	int				in;
+	char			*file;
 }					t_pipe;
 
 typedef struct s_pipex
@@ -43,6 +44,8 @@ typedef struct s_pipex
 	char			**args;
 	char			*file;
 	int				fd;
+	pid_t			id;
+	int				status;
 	t_pipe			*pipe;
 	char			*path;
 	int				rd_wr;
@@ -92,6 +95,6 @@ char				*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
 //=======================ERROR======================
 void				ft_exit(char *message);
 //===============excution=======================
-void				execute(t_pipex *cmdline, char **env);
+int					execute(t_pipex *cmdline, char **env);
 void				ft_cmdnotfound(char *cmd);
 #endif
