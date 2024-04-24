@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:04:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 03:45:03 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:29:33 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_writeheredoc(char *holder, t_pipex *cmdline)
 		return (free(holder));
 	write(fd, holder, ft_strlen(holder));
 	close(fd);
-	return (cmdline->file = "/tmp/heredoc",free(holder));
+	return (cmdline->file = "/tmp/heredoc", free(holder));
 }
 
 void	ft_readheredoc(t_pipex *cmdline)
@@ -49,7 +49,7 @@ void	ft_readheredoc(t_pipex *cmdline)
 		write(1, heredoc, ft_strlen(heredoc));
 		line = get_next_line(0);
 		if (!line)
-			return(free(holder)) ;
+			return (free(holder));
 		if (!ft_strncmp(line, cmdline->delimiter, ft_strlen(cmdline->delimiter))
 			&& (ft_strlen(line) - 1) == ft_strlen(cmdline->delimiter))
 		{
@@ -61,7 +61,7 @@ void	ft_readheredoc(t_pipex *cmdline)
 			return (free(line));
 		free(line);
 	}
-	return (ft_writeheredoc(holder, cmdline),free(heredoc));
+	return (ft_writeheredoc(holder, cmdline), free(heredoc));
 }
 
 int	ft_findfiles_heredoc(t_pipex *cmdline, char **str)
