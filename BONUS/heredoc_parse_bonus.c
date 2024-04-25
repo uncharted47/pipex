@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:04:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 21:47:10 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:18:13 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ void	ft_readheredoc(t_pipex *cmdline)
 	while (1)
 	{
 		write(1, heredoc, ft_strlen(heredoc));
-		line = get_next_line(0);
+		line = get_next_line(0, 0);
 		if (!line)
 			return (ft_writeheredoc(holder), free(heredoc));
 		if (!ft_strncmp(line, cmdline->delimiter, ft_strlen(cmdline->delimiter))
 			&& (ft_strlen(line) - 1) == ft_strlen(cmdline->delimiter))
 		{
+			get_next_line(0, 1);
 			free(line);
 			break ;
 		}

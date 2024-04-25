@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 01:35:12 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/23 18:41:12 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:17:09 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, int flag);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *str);
 char	*ft_strchr(const char *str, int c);

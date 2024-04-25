@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 01:37:39 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/01/31 06:58:13 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:20:31 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,17 +92,19 @@ char	*readbuffer(char *holder, int fd, char *buffer)
 	return (free(buffer), holder);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, int flag)
 {
 	char		*buffer;
 	char		*line;
 	static char	*holder;
 
 	buffer = NULL;
+	if (flag)
+		return(free(holder),NULL);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	holder = readbuffer(holder, fd, buffer);
-	if (!holder)
+	if (!holder || flag)
 		return (NULL);
 	line = readline(holder);
 	holder = remove_line(holder);
