@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:03:13 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 21:31:14 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 23:45:39 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	ft_exitstatus(t_pipex *cmdline, t_pipex *head, int fd)
 		return (ft_close(fd), ft_cmdnotfound(cmdline->args[0],
 				"Pipex : Directory cannot excute "), ft_lstclear(&head),
 			exit(126), 1);
-	if ((access(cmdline->args[0], F_OK) == 0 && access(cmdline->args[0], X_OK) ==
-		-1) || (!cmdline->path && cmdline->pipe->env))
+	if ((access(cmdline->args[0], F_OK) == 0 && access(cmdline->args[0],
+				X_OK) == -1) || (!cmdline->path && cmdline->pipe->env))
 		return (ft_close(fd), ft_cmdnotfound(cmdline->args[0],
 				"Pipex : permission denied "), ft_lstclear(&head), exit(126),
 			1);
@@ -89,10 +89,10 @@ int	ispath(char *cmd)
 	return (0);
 }
 
-void ft_close(int fd)
+void	ft_close(int fd)
 {
-	if(fd == -1)
-		return;
+	if (fd == -1)
+		return ;
 	close(fd);
 	return ;
 }

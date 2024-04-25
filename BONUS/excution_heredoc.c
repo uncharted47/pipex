@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 21:32:03 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 23:40:36 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,10 @@ static int	ft_dupfiles(t_pipex *cmdline)
 
 static int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 {
-	pid_t	id;
 	int		fd;
 	int		status;
 
-	fd = 0;
-	id = 0;
+	fd = -1;
 	status = 0;
 	if (ft_dupfiles(cmdline))
 		(perror(cmdline->pipe->file), status = 1);
@@ -98,7 +96,7 @@ static int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 		if (execve(cmdline->path, cmdline->args, env))
 			ft_exitstatus(cmdline, head, fd);
 	}
-	return (id);
+	return (0);
 }
 
 int	execute_heredoc(t_pipex *cmdline, char **env)

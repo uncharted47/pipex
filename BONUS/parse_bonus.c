@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 21:29:02 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 23:37:59 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ t_pipex	*create_linecmd(char **cmd, char **env)
 	return (cmdhead);
 }
 
-t_pipex	*parse(char **str, char **env, int cmd)
+t_pipex	*parse(char **str, char **env)
 {
 	t_pipex	*pipe;
 
@@ -107,8 +107,5 @@ t_pipex	*parse(char **str, char **env, int cmd)
 		(ft_lstclear(&pipe), ft_exit("Pipex Error: allocation failed \n"));
 	if (!ft_findfiles(pipe, str))
 		return (ft_lstclear(&pipe), NULL);
-	else if (cmd < 5)
-		return (ft_lstclear(&pipe), ft_exit("Pipex : not enough arguments \n"),
-			NULL);
 	return (pipe);
 }

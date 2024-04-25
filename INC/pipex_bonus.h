@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 18:43:33 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:33:25 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_args
 
 //==========================parsing==================
 t_pipex		*create_linecmd(char **cmd, char **env);
-t_pipex		*parse(char **str, char **env, int cmd);
+t_pipex		*parse(char **str, char **env);
 char		*get_cmdpath(char *path, char *cmd);
 char		*get_envpath(char **env);
 size_t		get_outfile(char **cmd);

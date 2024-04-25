@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 01:37:39 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 22:20:31 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 23:45:43 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*get_next_line(int fd, int flag)
 
 	buffer = NULL;
 	if (flag)
-		return(free(holder),NULL);
+		return (free(holder), NULL);
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	holder = readbuffer(holder, fd, buffer);

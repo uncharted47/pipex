@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:11 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 01:33:54 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 23:43:15 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,23 @@ char	*get_cmdpath(char *path, char *cmd)
 {
 	char	**split;
 	char	*new;
-	char	**cmdsplit;
 	char	*tmp;
+	char	**cmdsplit;
 
+	split = NULL;
 	cmdsplit = ft_split(cmd, WSP);
+	tmp = ft_strdup(cmdsplit[0]);
+	if (ispath(tmp))
+		return (free(cmd), failsafe(cmdsplit), tmp);
+	free(tmp);
 	new = ft_strjoin(ft_strdup("/"), cmdsplit[0]);
 	if (access(cmdsplit[0], F_OK | X_OK) != -1)
-	{
-		tmp = ft_strdup(cmdsplit[0]);
-		failsafe(cmdsplit);
-		free(new);
-		free(cmd);
-		return (tmp);
-	}
-	if (!path)
 		return (tmp = ft_strdup(cmdsplit[0]), failsafe(cmdsplit), free(new),
 			free(cmd), tmp);
-	split = ft_split((path + 5), ":");
+	if (path)
+		split = ft_split((path + 5), ":");
 	if (!split)
-		return (perror("Error:"), free(new), free(cmdsplit), NULL);
+		return (free(new), free(cmd), failsafe(cmdsplit), NULL);
 	return (cmdpath_helper(split, cmdsplit, cmd, new));
 }
 
@@ -43,7 +41,6 @@ char	*get_envpath(char **env)
 	size_t	i;
 
 	i = 0;
-
 	if (!env || !*env)
 		return (NULL);
 	while (env[i])
@@ -71,9 +68,9 @@ char	*ft_removepath(char *cmd)
 	char	*str;
 	char	*result;
 
+	if (!cmd)
+		return (NULL);
 	i = ft_strlen(cmd) - 1;
-	if (ft_strlen(cmd) == i + 1)
-		return (ft_strdup(cmd));
 	str = ft_strdup(cmd);
 	while (i && str[i] != '/')
 		i--;

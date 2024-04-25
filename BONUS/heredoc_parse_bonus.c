@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:04:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 22:18:13 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 23:45:16 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,10 @@ void	ft_readheredoc(t_pipex *cmdline)
 
 	holder = NULL;
 	heredoc = pipecount(cmdline);
-	(line = NULL, cmdline->file = "/tmp/heredoc");
+	line = NULL;
 	while (1)
 	{
-		write(1, heredoc, ft_strlen(heredoc));
-		line = get_next_line(0, 0);
+		(write(1, heredoc, ft_strlen(heredoc)), line = get_next_line(0, 0));
 		if (!line)
 			return (ft_writeheredoc(holder), free(heredoc));
 		if (!ft_strncmp(line, cmdline->delimiter, ft_strlen(cmdline->delimiter))
@@ -72,6 +71,7 @@ int	ft_findfiles_heredoc(t_pipex *cmdline, char **str)
 	i = 0;
 	cmdline->rd_wr = 1;
 	cmdline->delimiter = str[0];
+	cmdline->file = "/tmp/heredoc";
 	cmdline = ft_lstlast(cmdline);
 	i = get_outfile(str);
 	cmdline->rd_wr = 2;
@@ -84,26 +84,13 @@ t_pipex	*parse_heredoc(char **str, char **env, int cmd)
 	t_pipex	*pipe;
 
 	pipe = NULL;
+	if (cmd < 5)
+		return (ft_exit("Pipex : not enough arguments \n"), NULL);
 	pipe = create_linecmd((str + 1), env);
 	if (!pipe || !pipe->pipe)
 		return (ft_lstclear(&pipe),
 			ft_exit("Pipex Error: allocation failed \n"), NULL);
 	ft_findfiles_heredoc(pipe, str);
-	if (ft_lstsize(pipe) < 2)
-	{
-		ft_lstclear(&pipe);
-		ft_exit("Pipex : 4 arguments atleast \n");
-		return (NULL);
-	}
-	if (ft_lstsize(pipe) < 2 || cmd < 5)
-	{
-		ft_lstclear(&pipe);
-		ft_exit("Pipex : atleast 2 commands for 1 pipe \n");
-		return (NULL);
-	}
-	else if (cmd < 5)
-		return (ft_lstclear(&pipe), ft_exit("Pipex : not enough arguments \n"),
-			NULL);
 	ft_readheredoc(pipe);
 	return (pipe);
 }

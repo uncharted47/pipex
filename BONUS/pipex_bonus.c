@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 18:04:02 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:34:00 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int cmd, char *str[], char *env[])
 
 	if (cmd < 5)
 	{
-		ft_exit("Pipex : 4 argumentss atleast \n");
+		ft_exit("Pipex : 5 argumentss atleast \n");
 		return (1);
 	}
 	if (!ft_strncmp("here_doc", str[1], ft_strlen("here_doc"))
@@ -30,7 +30,7 @@ int	main(int cmd, char *str[], char *env[])
 	}
 	else
 	{
-		head = parse(&str[1], env, cmd);
+		head = parse(&str[1], env);
 		status = execute(head, env);
 	}
 	return (status);

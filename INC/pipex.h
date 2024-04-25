@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 21:08:38 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 22:24:52 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,6 @@ void		ft_cmdnotfound(char *cmd, char *message);
 //===============excution=======================
 int			execute(t_pipex *cmdline, char **env);
 int			ft_exitstatus(t_pipex *cmdline, t_pipex *head, int fd);
+int			ispath(char *cmd);
+void		ft_close(int fd);
 #endif
