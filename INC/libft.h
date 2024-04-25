@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 16:30:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 18:32:11 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:53:05 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_pipe
 	int				in;
 	int				fd;
 	char			*file;
+	char			*env;
 }					t_pipe;
 
 typedef struct s_pipex

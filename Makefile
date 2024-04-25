@@ -6,7 +6,7 @@
 #    By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/11 05:25:19 by elyzouli          #+#    #+#              #
-#    Updated: 2024/04/24 18:41:59 by elyzouli         ###   ########.fr        #
+#    Updated: 2024/04/25 20:02:12 by elyzouli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC_FILES = $(wildcard SRC/*.c) $(wildcard libft/*.c)
 OBJ = $(SRC_FILES:.c=.o)
 SRCBNS_FILES = $(wildcard BONUS/*.c) $(wildcard GNL/*.c) $(wildcard libft/*.c)
 OBJBNS = $(SRCBNS_FILES:.c=.o)
-CFLAGS = -g -Wall -Werror -Wextra -fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra #-fsanitize=address
 
 all: $(NAME)
 

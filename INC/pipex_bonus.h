@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 22:02:51 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 18:43:33 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char		*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
 				char *new);
 t_pipex		*parse_heredoc(char **str, char **env, int cmd);
 char		*pipecount(t_pipex *cmdline);
+int			ispath(char *cmd);
 //=======================ERROR======================
 void		ft_exit(char *message);
 int			ft_exitstatus(t_pipex *cmdline, t_pipex *head, int fd);
@@ -52,6 +53,7 @@ void		ft_cmdnotfound(char *cmd, char *message);
 //===============excution_heredoc=======================
 int			execute_heredoc(t_pipex *cmdline, char **env);
 void		ft_readheredoc(t_pipex *cmdline);
+void		ft_close(int fd);
 //===============excution=======================
 int			execute(t_pipex *cmdline, char **env);
 #endif

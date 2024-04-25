@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 00:16:09 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:29:02 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,18 @@ char	**ft_getargs(char *str, char *cmd)
 	t_args	args;
 	char	**split;
 
-	args.i = 0;
-	args.tmp = ft_strtrim(str, WSP);
-	if (!args.tmp)
+	(void)cmd;
+	split = NULL;
+	split = ft_split(str, WSP);
+	if (!split)
 		return (NULL);
-	while (args.tmp[args.i] && !is_sep(args.tmp[args.i], WSP))
-		args.i++;
-	args.arr = (char **)malloc(sizeof(char *) * 3);
-	if (!args.arr)
-		return (perror("ERROR:"), NULL);
-	(split = ft_split(cmd, WSP), args.arr[0] = ft_removepath(split[0]));
-	if (!args.arr[0])
-		return (free(args.tmp), free(args.arr), failsafe(split), NULL);
-	if (args.i == ft_strlen(args.tmp))
-		return (args.arr[1] = NULL, free(args.tmp), failsafe(split), args.arr);
-	(args.tmp2 = ft_strtrim(&(args.tmp[args.i]), WSP), failsafe(split));
-	if (!args.tmp2)
-		return (free(args.tmp), free(args.arr[0]), free(args.arr),
-			free(args.tmp), NULL);
-	args.arr[1] = ft_strdup(args.tmp2);
-	if (!args.arr[1])
-		return (free(args.arr[0]), free(args.tmp), free(args.arr), NULL);
-	return (args.arr[2] = NULL, free(args.tmp), free(args.tmp2), args.arr);
+	args.arr = split;
+	args.tmp = ft_removepath(args.arr[0]);
+	if (!args.tmp)
+		return (args.arr);
+	free(args.arr[0]);
+	args.arr[0] = args.tmp;
+	return (args.arr);
 }
 
 t_pipe	*ft_initpipe(void)
@@ -103,6 +93,7 @@ t_pipex	*create_linecmd(char **cmd, char **env)
 		ft_lstadd_back(&cmdhead, cmdline);
 		i++;
 	}
+	cmdline->pipe->env = get_envpath(env);
 	return (cmdhead);
 }
 
@@ -113,17 +104,11 @@ t_pipex	*parse(char **str, char **env, int cmd)
 	pipe = NULL;
 	pipe = create_linecmd((str + 1), env);
 	if (!pipe || !pipe->pipe)
-		(ft_lstclear(&pipe), ft_exit("Pipex Error: allocation failed"));
+		(ft_lstclear(&pipe), ft_exit("Pipex Error: allocation failed \n"));
 	if (!ft_findfiles(pipe, str))
 		return (ft_lstclear(&pipe), NULL);
-	if (ft_lstsize(pipe) < 2 || cmd < 5)
-	{
-		ft_lstclear(&pipe);
-		ft_exit("Pipex : 4 argumentss atleast \n");
-		return (NULL);
-	}
 	else if (cmd < 5)
-		return (ft_lstclear(&pipe), ft_exit("Pipex : not enough arguments"),
+		return (ft_lstclear(&pipe), ft_exit("Pipex : not enough arguments \n"),
 			NULL);
 	return (pipe);
 }

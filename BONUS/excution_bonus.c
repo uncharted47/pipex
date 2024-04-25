@@ -6,11 +6,11 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 00:26:17 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:27:31 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	ft_duphelper(t_pipex *cmdline)
 {
@@ -21,11 +21,11 @@ int	ft_duphelper(t_pipex *cmdline)
 		(status = 1);
 	if (dup2(cmdline->pipe->out, 1) == -1)
 		(status = 1);
-	close(cmdline->pipe->in);
-	close(cmdline->pipe->out);
-	close(cmdline->pipe->pipe[1]);
-	close(cmdline->pipe->pipe[0]);
-	close(cmdline->pipe->tmp);
+	ft_close(cmdline->pipe->in);
+	ft_close(cmdline->pipe->out);
+	ft_close(cmdline->pipe->pipe[1]);
+	ft_close(cmdline->pipe->pipe[0]);
+	ft_close(cmdline->pipe->tmp);
 	return (status);
 }
 
@@ -52,18 +52,18 @@ int	ft_dupfiles(t_pipex *cmdline)
 		return (ft_dupfiles_helper(cmdline));
 	else if (cmdline->rd_wr == 2)
 	{
-		(close(cmdline->pipe->pipe[1]), close(cmdline->pipe->in),
+		(ft_close(cmdline->pipe->pipe[1]), ft_close(cmdline->pipe->in),
 			cmdline->pipe->in = -1);
 		cmdline->pipe->out = open(cmdline->file, O_CREAT | O_RDWR | O_TRUNC,
 				0666);
 		if (cmdline->pipe->out == -1)
-			return (close(cmdline->pipe->tmp),
+			return (ft_close(cmdline->pipe->tmp),
 				cmdline->pipe->file = cmdline->file, 1);
 		return (cmdline->pipe->in = cmdline->pipe->tmp, 0);
 	}
-	(close(cmdline->pipe->in), cmdline->pipe->in = -1);
-	(close(cmdline->pipe->out), cmdline->pipe->out = -1);
-	close(cmdline->pipe->pipe[1]);
+	(ft_close(cmdline->pipe->in), cmdline->pipe->in = -1);
+	(ft_close(cmdline->pipe->out), cmdline->pipe->out = -1);
+	ft_close(cmdline->pipe->pipe[1]);
 	if (pipe(cmdline->pipe->pipe) == -1)
 		return (1);
 	return (cmdline->pipe->in = cmdline->pipe->tmp,
@@ -73,12 +73,10 @@ int	ft_dupfiles(t_pipex *cmdline)
 
 int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 {
-	pid_t	id;
 	int		fd;
 	int		status;
 
 	fd = 0;
-	id = 0;
 	status = 0;
 	if (ft_dupfiles(cmdline))
 		(perror(cmdline->pipe->file), status = 1);
@@ -89,10 +87,16 @@ int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 	{
 		if (ft_duphelper(cmdline) && status)
 			return (ft_lstclear(&head), exit(1), 1);
+		if (!ispath(cmdline->path))
+		{
+			return (ft_cmdnotfound(cmdline->args[0],
+					"Pipex : Command not found "), ft_lstclear(&head),
+				exit(127), 1);
+		}
 		if (execve(cmdline->path, cmdline->args, env))
 			ft_exitstatus(cmdline, head, fd);
 	}
-	return (id);
+	return (0);
 }
 
 int	execute(t_pipex *cmdline, char **env)
@@ -107,8 +111,8 @@ int	execute(t_pipex *cmdline, char **env)
 		ft_childprocess(cmdline, env, head);
 		cmdline = cmdline->next;
 	}
-	close(ft_lstlast(head)->pipe->in);
-	close(ft_lstlast(head)->pipe->out);
+	ft_close(ft_lstlast(head)->pipe->in);
+	ft_close(ft_lstlast(head)->pipe->out);
 	cmdline = head;
 	while (cmdline)
 	{

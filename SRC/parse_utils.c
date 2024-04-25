@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:11 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 22:18:42 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 01:33:54 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*get_envpath(char **env)
 	size_t	i;
 
 	i = 0;
+
 	if (!env || !*env)
 		return (NULL);
 	while (env[i])

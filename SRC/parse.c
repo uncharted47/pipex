@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/24 22:05:09 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/25 01:36:29 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ char	**ft_getargs(char *str, char *cmd)
 	t_args	args;
 
 	args.i = 0;
-	args.tmp = ft_strtrim(str, WSP);
+	if (str)
+		args.tmp = ft_strtrim(str, WSP);
 	if (!args.tmp)
 		return (NULL);
 	while (args.tmp[args.i] && !is_sep(args.tmp[args.i], WSP))
@@ -52,6 +53,7 @@ char	**ft_getargs(char *str, char *cmd)
 	if (args.i == ft_strlen(args.tmp))
 		return (args.arr[1] = NULL, free(args.tmp), args.arr);
 	args.tmp2 = ft_strtrim(&(args.tmp[args.i]), WSP);
+	dprintf(2, "%s \n", args.tmp2);
 	if (!args.tmp2)
 		return (free(args.tmp), free(args.arr[0]), free(args.arr),
 			free(args.tmp), NULL);
