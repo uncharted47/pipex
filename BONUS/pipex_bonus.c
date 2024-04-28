@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/28 02:42:22 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/28 03:27:30 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 int	main(int cmd, char *str[], char *env[])
 {
 	t_pipex	*head;
-	int		status= 1;
+	int		status;
 
+	status = 1;
 	if (cmd < 5)
 	{
 		ft_exit("Pipex : 4 arguments atleast \n");

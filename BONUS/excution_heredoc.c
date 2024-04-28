@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/28 02:37:00 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/28 03:27:36 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static int	ft_dupfiles(t_pipex *cmdline)
 
 static int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 {
-	int		fd;
-	int		status;
+	int	fd;
+	int	status;
 
 	fd = -1;
 	status = 0;
@@ -89,7 +89,7 @@ static int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 			return (ft_lstclear(&head), exit(1), 1);
 		if (ft_strlen(cmdline->path) == 0)
 			(ft_cmdnotfound(cmdline->path, CMDNF), ft_lstclear(&head),
-				exit(127) ,write(2,"here \n",ft_strlen("here \n")));
+				exit(127), write(2, "here \n", ft_strlen("here \n")));
 		if (!ispath(cmdline->path) && cmdline->pipe->env)
 			return (ft_cmdnotfound(cmdline->args[0], CMDNF), ft_lstclear(&head),
 				exit(127), 1);
@@ -121,5 +121,5 @@ int	execute_heredoc(t_pipex *cmdline, char **env)
 	}
 	ft_lstclear(&head);
 	unlink("/tmp/heredoc");
-	return (WEXITSTATUS(status));
+	return ((status >> 8) & 0x0000ff);
 }

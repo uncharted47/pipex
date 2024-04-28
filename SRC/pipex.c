@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:23:55 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/28 00:42:48 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/28 03:26:33 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,5 @@ int	main(int cmd, char *str[], char *env[])
 		return (0);
 	}
 	head = parse(&str[1], env);
-	return (execute(head, env)); 
+	return (execute(head, env));
 }
