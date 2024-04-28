@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 15:35:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 23:40:36 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/28 02:37:00 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ static int	ft_childprocess(t_pipex *cmdline, char **env, t_pipex *head)
 	{
 		if (ft_duphelper(cmdline) && status)
 			return (ft_lstclear(&head), exit(1), 1);
-		if (!ispath(cmdline->path))
-		{
-			return (ft_cmdnotfound(cmdline->args[0],
-					"Pipex : Command not found "), ft_lstclear(&head),
+		if (ft_strlen(cmdline->path) == 0)
+			(ft_cmdnotfound(cmdline->path, CMDNF), ft_lstclear(&head),
+				exit(127) ,write(2,"here \n",ft_strlen("here \n")));
+		if (!ispath(cmdline->path) && cmdline->pipe->env)
+			return (ft_cmdnotfound(cmdline->args[0], CMDNF), ft_lstclear(&head),
 				exit(127), 1);
-		}
 		if (execve(cmdline->path, cmdline->args, env))
 			ft_exitstatus(cmdline, head, fd);
 	}

@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 17:03:13 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 23:45:39 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/28 02:38:12 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,8 @@ void	ft_cmdnotfound(char *cmd, char *message)
 {
 	char	*msg;
 
-	if (!cmd)
-	{
-		cmd = "";
-		message = "Pipex : permission denied: ";
-	}
 	msg = ft_strdup(message);
 	msg = ft_strjoin(msg, cmd);
-	if (!msg)
-	{
-		write(2, msg, ft_strlen(msg));
-		return ;
-	}
 	msg = ft_strjoin(msg, " \n");
 	write(2, msg, ft_strlen(msg));
 	free(msg);
@@ -38,11 +28,10 @@ int	ft_exitstatus(t_pipex *cmdline, t_pipex *head, int fd)
 {
 	fd = open(cmdline->args[0], __O_DIRECTORY);
 	if (fd != -1)
-		return (ft_close(fd), ft_cmdnotfound(cmdline->args[0],
-				"Pipex : Directory cannot excute "), ft_lstclear(&head),
+		return (ft_close(fd), isdir(cmdline->args[0]), ft_lstclear(&head),
 			exit(126), 1);
 	if ((access(cmdline->args[0], F_OK) == 0 && access(cmdline->args[0],
-				X_OK) == -1) || (!cmdline->path && cmdline->pipe->env))
+				X_OK) == -1))
 		return (ft_close(fd), ft_cmdnotfound(cmdline->args[0],
 				"Pipex : permission denied "), ft_lstclear(&head), exit(126),
 			1);
@@ -79,7 +68,7 @@ int	ispath(char *cmd)
 
 	i = 0;
 	if (!cmd)
-		return (1);
+		return (0);
 	while (cmd[i])
 	{
 		if (cmd[i] == '/')

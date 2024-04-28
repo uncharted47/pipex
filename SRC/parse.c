@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:34:00 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 22:25:11 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/26 17:31:21 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char	*cmdpath_helper(char **split, char **cmdsplit, char *cmd, char *new)
 	{
 		line = ft_strjoin2(split[i], new);
 		if (!line)
-			return (failsafe(split), free(cmd), failsafe(cmdsplit),
-				perror("Pipex Error: allocation failed:"), free(new), NULL);
+			return (failsafe(split), free(cmd), failsafe(cmdsplit), free(new),
+				NULL);
 		if (!access(line, F_OK | X_OK))
 			return (failsafe(split), free(cmd), failsafe(cmdsplit), free(new),
 				line);

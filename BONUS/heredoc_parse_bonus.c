@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 18:04:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 23:45:16 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/26 00:16:55 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_pipex	*parse_heredoc(char **str, char **env, int cmd)
 	t_pipex	*pipe;
 
 	pipe = NULL;
-	if (cmd < 5)
+	if (cmd < 6)
 		return (ft_exit("Pipex : not enough arguments \n"), NULL);
 	pipe = create_linecmd((str + 1), env);
 	if (!pipe || !pipe->pipe)

@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/22 14:17:11 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 23:43:15 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/27 23:25:40 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,20 @@ char	*get_cmdpath(char *path, char *cmd)
 	char	**cmdsplit;
 
 	split = NULL;
+	if (!ft_strlen(cmd))
+		return (free(cmd), tmp = ft_strdup(""), tmp);
 	cmdsplit = ft_split(cmd, WSP);
+	if (!cmdsplit)
+		return (cmd);
 	tmp = ft_strdup(cmdsplit[0]);
 	if (ispath(tmp))
 		return (free(cmd), failsafe(cmdsplit), tmp);
 	free(tmp);
 	new = ft_strjoin(ft_strdup("/"), cmdsplit[0]);
-	if (access(cmdsplit[0], F_OK | X_OK) != -1)
-		return (tmp = ft_strdup(cmdsplit[0]), failsafe(cmdsplit), free(new),
-			free(cmd), tmp);
 	if (path)
 		split = ft_split((path + 5), ":");
 	if (!split)
-		return (free(new), free(cmd), failsafe(cmdsplit), NULL);
+		return (free(new), failsafe(cmdsplit), cmd);
 	return (cmdpath_helper(split, cmdsplit, cmd, new));
 }
 

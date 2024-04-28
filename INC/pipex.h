@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 05:15:04 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 22:24:52 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/27 23:26:32 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # define WSP " \t\n\f\r\v"
+# define CMDNF "Pipex : Command not found "
 
 typedef struct s_args
 {
@@ -44,6 +45,7 @@ char		*cmdpath_helper(char **split, char **cmdsplit, char *cmd,
 //=======================ERROR======================
 void		ft_exit(char *message);
 void		ft_cmdnotfound(char *cmd, char *message);
+void		isdir(char *cmd);
 //===============excution=======================
 int			execute(t_pipex *cmdline, char **env);
 int			ft_exitstatus(t_pipex *cmdline, t_pipex *head, int fd);

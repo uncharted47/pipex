@@ -6,7 +6,7 @@
 /*   By: elyzouli <elyzouli@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 21:54:50 by elyzouli          #+#    #+#             */
-/*   Updated: 2024/04/25 21:30:18 by elyzouli         ###   ########.fr       */
+/*   Updated: 2024/04/27 20:21:33 by elyzouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,16 @@ char	*ft_strdup(const char *str)
 	}
 	dup[i] = '\0';
 	return (dup);
+}
+
+void	isdir(char *cmd)
+{
+	char	*msg;
+
+	msg = ft_strdup("Pipex :");
+	msg = ft_strjoin(msg, cmd);
+	msg = ft_strjoin(msg, ": Is a directory \n");
+	write(2, msg, ft_strlen(msg));
+	free(msg);
+	return ;
 }
